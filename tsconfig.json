@@ -28,6 +28,6 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "app/workspace/layout.jsx", "app/workspace/provider.jsx"  ],
   "exclude": ["node_modules"]
 }
