@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 import {
   Dialog,
@@ -20,30 +20,49 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Sparkle } from "lucide-react";
+import { Loader2Icon, Sparkle } from "lucide-react";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 
 function AddNewCourseDialog({ children }) {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    noOfChapters: 0,
+    includeVideo: false,
+    category: "",
+    level: "",
+  });
 
-    const [formData,setFormData]=useState({
-      name:'',
-      description:'',
-      noOfChapter:0,
-      includeVideo:false,
-      category:'',
-      level:''
+  const router = useRouter();
+
+  const onHandleInputChange = (feild, value) => {
+    setFormData({
+      ...formData,
+      [feild]: value,
     });
+    console.log(formData);
+  };
 
-    const onHandleInputChange=(feild,value)=>{
-        setFormData({
-            ...formData,
-            [feild]: value
-        });
-        console.log(formData);
-    } 
-
-    const onGenerate=()=>{
-      console.log(formData);
+  const onGenerate = async () => {
+    console.log(formData);
+    const courseId = uuidv4();
+    try {
+      setLoading(true);
+      const result = await axios.post("/api/generate-course-layout", {
+        ...formData,
+        courseId: courseId,
+      });
+      console.log(result.data);
+      setLoading(false);
+      router.push("/workspace/edit-course/" + result.data?.courseId);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
     }
+  };
 
   return (
     <Dialog>
@@ -55,25 +74,49 @@ function AddNewCourseDialog({ children }) {
             <div className="flex flex-col gap-4 mt-3">
               <div>
                 <label>Course Name</label>
-                <Input type="text" placeholder="Course Name" onChange={(event)=>onHandleInputChange('name',event?.target.value)} />
+                <Input
+                  type="text"
+                  placeholder="Course Name"
+                  onChange={(event) =>
+                    onHandleInputChange("name", event?.target.value)
+                  }
+                />
               </div>
               <div>
                 <label>Course Description (optional)</label>
-                <Textarea placeholder="Course Description" onChange={(event)=>onHandleInputChange('description',event?.target.value)} />
+                <Textarea
+                  placeholder="Course Description"
+                  onChange={(event) =>
+                    onHandleInputChange("description", event?.target.value)
+                  }
+                />
               </div>
               <div>
                 <label>No. of Chapters</label>
-                <Input type="number" placeholder="Number of Chapters" onChange={(event)=>onHandleInputChange('noOfChapters',event?.target.value)} />
+                <Input
+                  type="number"
+                  placeholder="Number of Chapters"
+                  onChange={(event) =>
+                    onHandleInputChange("noOfChapters", event?.target.value)
+                  }
+                />
               </div>
               <div className="flex gap-3 items-center">
                 <label>Include Video</label>
                 <Switch
-                onCheckedChange={()=>onHandleInputChange('includeVideo',!formData?.includeVideo)}
+                  onCheckedChange={() =>
+                    onHandleInputChange(
+                      "includeVideo",
+                      !formData?.includeVideo
+                    )
+                  }
                 />
               </div>
               <div>
-                <label className="mb-2" >Difficulty level</label>
-                <Select onValueChange={(value)=>onHandleInputChange('level',value)}>
+                <label className="mb-2">Difficulty level</label>
+                <Select
+                  onValueChange={(value) => onHandleInputChange("level", value)}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Difficulty level" />
                   </SelectTrigger>
@@ -86,10 +129,26 @@ function AddNewCourseDialog({ children }) {
               </div>
               <div>
                 <label>Category</label>
-                <Input placeholder="Category (Seperated By Comma)"  onChange={(event)=>onHandleInputChange('category',event?.target.value)} />
+                <Input
+                  placeholder="Category (Seperated By Comma)"
+                  onChange={(event) =>
+                    onHandleInputChange("category", event?.target.value)
+                  }
+                />
               </div>
               <div>
-                <Button className={'w-full'} onClick={onGenerate} > <Sparkle/>Generate Course</Button>
+                <Button
+                  className={"w-full"}
+                  onClick={onGenerate}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Loader2Icon className="animate-spin" />
+                  ) : (
+                    <Sparkle />
+                  )}
+                  Generate Course
+                </Button>
               </div>
             </div>
           </DialogDescription>
