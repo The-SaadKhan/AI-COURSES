@@ -37,13 +37,13 @@ Schema:
 "string"
 , User Input:`;
 
+export const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+  });
+
 export async function POST(req) {
   const { courseId, ...formData } = await req.json();
   const user = await currentUser();
-
-  const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-  });
 
   const tools = [
     {
@@ -55,7 +55,9 @@ export async function POST(req) {
     tools,
   };
 
-  const model = 'gemini-2.0-flash';
+  // const model = 'gemini-2.0-flash';
+  const model = "gemini-1.5-flash";
+
 
   const contents = [
     {
