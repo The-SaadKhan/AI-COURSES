@@ -3,12 +3,15 @@ import { Book, Clock, Settings, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react'
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 
 function CourseInfo({course}) {
   const [loading,setLoading]=useState(false)
   const courseLayout=course?.courseJson?.course;
-  
+  const router = useRouter();
+
   const GenerateCourseContent=async()=>{
     // Call API to Generate Course Content
 
@@ -21,11 +24,13 @@ function CourseInfo({course}) {
       })
       console.log(result.data)
       setLoading(false)
+      router.replace('/workspace')
+      toast.success("Course Generated Successfully")
     }
     catch(error){
       console.log(error)
       setLoading(false)
-
+      toast.error("Server Side error,Try Agian")
     }
 
   }

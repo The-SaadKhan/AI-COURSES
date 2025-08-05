@@ -1,4 +1,6 @@
-import SignIn from '@clerk/nextjs'
+// import SignIn from '@clerk/nextjs'
+import { SignIn } from '@clerk/nextjs'; // ✅ CORRECT
+
 
 export default function Page() {
   return(

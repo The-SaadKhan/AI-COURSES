@@ -55,8 +55,8 @@ export async function POST(req) {
     tools,
   };
 
-  // const model = 'gemini-2.0-flash';
-  const model = "gemini-1.5-flash";
+  const model = 'gemini-2.0-flash';
+  // const model = "gemini-1.5-flash";
 
 
   const contents = [
