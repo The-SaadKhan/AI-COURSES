@@ -4,7 +4,7 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import { GoogleGenAI } from '@google/genai';
 import { NextResponse } from 'next/server';
 import axios from 'axios';
-
+import { eq } from 'drizzle-orm'; // Add missing import
 
 const PROMPT = `Genrate Learning Course depends on following
 details. In which Make sure to add Course Name,
@@ -37,15 +37,20 @@ Schema:
 "string"
 , User Input:`;
 
-export const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-  });
+// FIX: Move AI initialization inside the function instead of exporting it
+// export const ai = new GoogleGenAI({ // ❌ This was causing the build error
 
 export async function POST(req) {
   const { courseId, ...formData } = await req.json();
   const user = await currentUser();
-  const {has}= await auth()
-  const hasPremiumAccess=has({plan:'starter'})
+  const { has } = await auth();
+  const hasPremiumAccess = has({ plan: 'starter' });
+  
+  // FIX: Initialize AI client inside the function
+  const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+  });
+
   const tools = [
     {
       googleSearch: {},
@@ -59,7 +64,6 @@ export async function POST(req) {
   const model = 'gemini-2.0-flash';
   // const model = "gemini-1.5-flash";
 
-
   const contents = [
     {
       role: 'user',
@@ -71,12 +75,12 @@ export async function POST(req) {
     },
   ];
 
-  if(!hasPremiumAccess){
+  if (!hasPremiumAccess) {
     const result = await db.select().from(coursesTable)
-    .where(eq(coursesTable.userEmail, user?.primaryEmailAddress.emailAddress))
+      .where(eq(coursesTable.userEmail, user?.primaryEmailAddress.emailAddress));
 
-    if(result?.length>=1){
-      return NextResponse.json({'resp':'limit exceed',})
+    if (result?.length >= 1) {
+      return NextResponse.json({ 'resp': 'limit exceed' });
     }
   }
 
@@ -89,12 +93,12 @@ export async function POST(req) {
   console.log(response.candidates[0].content.parts[0].text);
 
   const RawResp = response?.candidates[0]?.content?.parts[0]?.text;
-  const RawJson = RawResp.replace('```json', '').replace('```', '');
+  const RawJson = RawResp.replace('``````', '');
   const JSONResp = JSON.parse(RawJson);
-  const ImagePrompt=JSONResp.course?.bannerlmagePrompt;
+  const ImagePrompt = JSONResp.course?.bannerlmagePrompt;
 
   // generate Image
-  const bannerImageUrl=await GenerateImage(ImagePrompt);
+  const bannerImageUrl = await GenerateImage(ImagePrompt);
 
   // SAVE TO DATABASE
   const result = await db.insert(coursesTable).values({
@@ -102,28 +106,28 @@ export async function POST(req) {
     courseJson: JSONResp,
     userEmail: user?.primaryEmailAddress?.emailAddress,
     cid: courseId,
-    bannerImageUrl:bannerImageUrl,
+    bannerImageUrl: bannerImageUrl,
   });
 
   return NextResponse.json({ courseId: courseId });
 }
 
-const GenerateImage=async(ImagePrompt)=>{
-  const BASE_URL='https://aigurulab.tech';
-  const result = await axios.post(BASE_URL+'/api/generate-image',
-        {
-            width: 1024,
-            height: 1024,
-            input: ImagePrompt,
-            model: 'sdxl',//'flux'
-            aspectRatio:"16:9"//Applicable to Flux model only
-        },
-        {
-            headers: {
-                'x-api-key': process?.env?.AI_GURU_LAB_API, // Your API Key
-                'Content-Type': 'application/json', // Content Type
-            },
-        })
-  console.log(result.data.image) //Output Result: Base 64 Image
-      return result.data.image;
+const GenerateImage = async (ImagePrompt) => {
+  const BASE_URL = 'https://aigurulab.tech';
+  const result = await axios.post(BASE_URL + '/api/generate-image',
+    {
+      width: 1024,
+      height: 1024,
+      input: ImagePrompt,
+      model: 'sdxl',//'flux'
+      aspectRatio: "16:9"//Applicable to Flux model only
+    },
+    {
+      headers: {
+        'x-api-key': process?.env?.AI_GURU_LAB_API, // Your API Key
+        'Content-Type': 'application/json', // Content Type
+      },
+    });
+  console.log(result.data.image); //Output Result: Base 64 Image
+  return result.data.image;
 }
