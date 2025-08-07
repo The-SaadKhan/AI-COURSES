@@ -28,8 +28,8 @@ function EnrollCoursecard({course,enrollCourse}) {
         <div className="">
             <h2 className='flex justify-between text-sm text-primary' >Progress <span>{CalculatePerProgress()}%</span> </h2>
           <Progress value={CalculatePerProgress()}/>
-          <Link href={'/workspace/course/'+course?.cid} > 
-          <Button className={'w-full mt-3'} > <PlayCircle/> Continue Learning</Button>
+          <Link href={'/workspace/view-course/'+course?.cid} > 
+          <Button className={'w-full mt-3'}  > <PlayCircle/> Continue Learning</Button>
           </Link>
         </div>
       </div>
