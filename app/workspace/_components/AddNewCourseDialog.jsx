@@ -24,6 +24,7 @@ import { Loader2Icon, Sparkle } from "lucide-react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 function AddNewCourseDialog({ children }) {
   const [loading, setLoading] = useState(false);
@@ -55,7 +56,10 @@ function AddNewCourseDialog({ children }) {
         ...formData,
         courseId: courseId,
       });
-      console.log(result.data);
+      if (result.data.resp === "limit exceed") {
+        toast.warning("Please Subscribe to Plan!");
+        router.push('/workspace/billing');
+      }
       setLoading(false);
       router.push("/workspace/edit-course/" + result.data?.courseId);
     } catch (e) {
@@ -105,10 +109,7 @@ function AddNewCourseDialog({ children }) {
                 <label>Include Video</label>
                 <Switch
                   onCheckedChange={() =>
-                    onHandleInputChange(
-                      "includeVideo",
-                      !formData?.includeVideo
-                    )
+                    onHandleInputChange("includeVideo", !formData?.includeVideo)
                   }
                 />
               </div>

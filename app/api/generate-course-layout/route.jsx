@@ -1,6 +1,6 @@
 import { db } from '@/config/db';
 import { coursesTable } from '@/config/schema';
-import { currentUser } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { GoogleGenAI } from '@google/genai';
 import { NextResponse } from 'next/server';
 import axios from 'axios';
@@ -44,7 +44,8 @@ export const ai = new GoogleGenAI({
 export async function POST(req) {
   const { courseId, ...formData } = await req.json();
   const user = await currentUser();
-
+  const {has}= await auth()
+  const hasPremiumAccess=has({plan:'starter'})
   const tools = [
     {
       googleSearch: {},
@@ -69,6 +70,15 @@ export async function POST(req) {
       ],
     },
   ];
+
+  if(!hasPremiumAccess){
+    const result = await db.select().from(coursesTable)
+    .where(eq(coursesTable.userEmail, user?.primaryEmailAddress.emailAddress))
+
+    if(result?.length>=1){
+      return NextResponse.json({'resp':'limit exceed',})
+    }
+  }
 
   const response = await ai.models.generateContent({
     model,
