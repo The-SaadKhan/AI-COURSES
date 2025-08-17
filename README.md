@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🧠 AI Courses – An AI-Powered Course Generation Platform
 
-## Getting Started
+[![Live Demo](https://img.shields.io/badge/Demo-Live-success?logo=vercel&logoColor=white)](https://ai-courses-alpha.vercel.app/)
 
-First, run the development server:
+**AI Courses** is a modern, full-stack web application built with Next.js 14 that leverages the power of Google's Gemini AI to automatically generate complete, structured educational courses from a single prompt. It also creates custom course banners on the fly using AI Guru Lab.
+
+> This project showcases a real-world application of generative AI, modern authentication, serverless databases, and type-safe ORMs in a full-stack Next.js environment.
+
+---
+
+## ✨ Badges
+
+![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-18-blue?logo=react&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?logo=tailwind-css&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?logo=postgresql&logoColor=white)
+![Clerk](https://img.shields.io/badge/Clerk-Auth-6C47FF?logo=clerk&logoColor=white)
+![Drizzle ORM](https://img.shields.io/badge/Drizzle-ORM-C5F74F?logo=drizzle&logoColor=black)
+![Vercel](https://img.shields.io/badge/Hosted-Vercel-black?logo=vercel&logoColor=white)
+
+---
+
+## 🚀 Features
+
+-   🔐 **Secure Authentication**: Clerk for user management, sign-in, sign-up, and protected routes.
+-   🤖 **AI-Powered Course Generation**: Utilizes Google Gemini to create detailed course structures, chapters, and content from a user's prompt.
+-   🎨 **AI-Generated Banners**: Integrates with AI Guru Lab to automatically create visually appealing course banners.
+-   📚 **Dynamic Chapter Creation**: Generates individual chapters with AI-curated YouTube video suggestions to supplement learning.
+-   💾 **Robust Database**: Uses Neon's serverless PostgreSQL with Drizzle ORM for type-safe, efficient database queries.
+-   ✨ **Modern UI/UX**: Built with Tailwind CSS and ShadCN UI for a clean, responsive, and accessible interface.
+-   🌐 **Serverless Deployment**: Seamlessly deployed on Vercel, leveraging the best of serverless architecture.
+
+---
+
+## 🧰 Tech Stack
+
+| Frontend                     | Backend (Next.js API Routes) | AI & Database                  |
+| ---------------------------- | ---------------------------- | ------------------------------ |
+| Next.js 14 + React           | Next.js 14 Server Actions    | Neon (Serverless PostgreSQL)   |
+| TypeScript                   | Clerk (Auth & Middleware)    | Drizzle ORM                    |
+| Tailwind CSS + ShadCN UI     | Zod (Validation)             | Google Gemini API              |
+| Context API + Axios          |                              | AI Guru Lab API                |
+
+---
+
+## 🔐 Environment Variables
+
+To run this project locally, you need to set up the following environment variables. Create a `.env.local` file in the root directory and add the following:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Neon PostgreSQL Database URL
+DATABASE_URL="your-neon-database-connection-string"
+
+# Clerk Authentication Keys
+# Find these in your Clerk Dashboard
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+
+# Google Gemini API Key
+# Get this from Google AI Studio
+GOOGLE_GEMINI_API_KEY="your-gemini-api-key"
+
+# AI Guru Lab API Key (Optional, for image generation)
+AIGURULAB_API_KEY="your-aigurulab-api-key"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Production Deployment
+| Layer                      | Platform        | 
+|------------------------------|---------------|
+| Front-End                  | Vercel          |          
+| Back-End                   | Render          |  
+| DataBase                   | MongoDb Altas   |          
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🧠 Key Learnings:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Full-stack development with the Next.js 14 App Router.
 
-## Deploy on Vercel
+- Integrating and managing user authentication and middleware with Clerk.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Type-safe database modeling and querying with Drizzle ORM against a serverless PostgreSQL database (Neon).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Prompt engineering and streaming responses from a generative AI model (Google Gemini).
+
+- Handling server actions and API routes in a modern Next.js environment.
+
+- Building modern, component-based UIs with ShadCN and Tailwind CSS.
+
+- Automating deployment pipelines for a full-stack application using Vercel.
+
+## 🌐 Live Demo
+
+
+
+🚀 Check out the deployed project here: [AI-Courses](https://productivity-os.vercel.app/)
+
+
+
+---
+
