@@ -72,11 +72,8 @@ AIGURULAB_API_KEY="your-aigurulab-api-key"
 ## 🚀 Production Deployment
 | Layer                      | Platform        | 
 |------------------------------|---------------|
-| Front-End                  | Vercel          |          
-| Back-End                   | Render          |  
-| DataBase                   | MongoDb Altas   |          
-
-
+| Front-End                  | Vercel          |            
+| DataBase                   | SupaBase        |          
 
 
 
