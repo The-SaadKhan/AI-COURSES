@@ -100,7 +100,7 @@ AIGURULAB_API_KEY="your-aigurulab-api-key"
 
 
 
-🚀 Check out the deployed project here: [AI-Courses](https://productivity-os.vercel.app/)
+🚀 Check out the deployed project here: [AI-Courses](https://ai-courses-alpha.vercel.app/)
 
 
 
